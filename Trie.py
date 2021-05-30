@@ -16,7 +16,6 @@ def insert(tree, string):
     if tree.root == None: tree = addRoot(tree)
     if string == None: return None
     string = validateInput(String(string))
-    currentNode = tree.root.children
     length = len(string)
     x = 0
     while x != length:
@@ -25,7 +24,7 @@ def insert(tree, string):
         else:
             isEndOfWord = 0
         if x == 0 :
-            currentNode = caseOfLevel0(tree, string[x], currentNode, isEndOfWord)
+            currentNode = caseOfLevel0(tree, string[x], isEndOfWord)
             x += 1
         else:
             if currentNode.children == None: #Primer nodo hijo
@@ -57,7 +56,8 @@ def insert(tree, string):
                     x += 1
 
 
-def caseOfLevel0(tree, char, currentNode, isEndOfWord):#Revisar esta funcion, tratar de bajar la complejidad a la hora de leerla.
+def caseOfLevel0(tree, char, isEndOfWord):#Revisar esta funcion, tratar de bajar la complejidad a la hora de leerla.
+    currentNode = tree.root.children
     if currentNode == None: 
         createASCIINode(tree)
     updateASCII(tree.root.children.key, char)
