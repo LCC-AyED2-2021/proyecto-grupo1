@@ -28,6 +28,33 @@ def insert(tree, string):
             currentNode = caseOfLevel0(tree, string[x], currentNode, isEndOfWord)
             x += 1
         else:
+            if currentNode.children == None: #Primer nodo hijo
+                auxNode = TrieNode()
+                auxNode.key = string[x]
+                auxNode.isEndOfWord = auxNode.isEndOfWord + isEndOfWord        
+                auxNode.parent = currentNode
+                currentNode.children = auxNode
+                currentNode = auxNode
+                x += 1
+            else: #El nodo ya tiene al menos un hijo
+                parentNode = currentNode #Se guarda el nodo padre
+                currentNode = currentNode.children
+                while currentNode.nextNode != None:
+                    if currentNode.key == string[x]: #Si ya existe la key a insertar, entonces avanzamos por ella
+                        currentNode.isEndOfWord = currentNode.isEndOfWord + isEndOfWord
+                        x += 1
+                        break
+                if currentNode.key == string[x]: #Si ya existe la key a insertar, entonces avanzamos por ella
+                    currentNode.isEndOfWord = currentNode.isEndOfWord + isEndOfWord
+                    x += 1
+                else: #La key a insertar no se encuentra dentro de los hijos de parentNode
+                    auxNode = TrieNode()
+                    auxNode.key = string[x]
+                    auxNode.parent = parentNode 
+                    auxNode.isEndOfWord = auxNode.isEndOfWord + isEndOfWord
+                    currentNode.nextNode = auxNode
+                    currentNode = auxNode
+                    x += 1
 
 
 def caseOfLevel0(tree, char, currentNode, isEndOfWord):#Revisar esta funcion, tratar de bajar la complejidad a la hora de leerla.
@@ -35,30 +62,30 @@ def caseOfLevel0(tree, char, currentNode, isEndOfWord):#Revisar esta funcion, tr
         createASCIINode(tree)
     updateASCII(tree.root.children.key, char)
     currentNode = tree.root.children
-    if currentNode.nextNode == None:
+    if currentNode.nextNode == None: #Caso 1: El nodo a insertar es el primero del Trie, despues del ASCIINode
         auxNode = TrieNode()
         auxNode.key = char
         auxNode.parent = tree.root
         auxNode.isEndOfWord = isEndOfWord + auxNode.isEndOfWord
         currentNode.nextNode = auxNode
-        currentNode = auxNode
+        return auxNode
     else:
-        while currentNode.nextNode != None:
-            if currentNode.key == char:
+        while currentNode.nextNode != None: #Caso 2: El nodo a insertar no es el primero despues de ASCIINode
+            if currentNode.key == char: #La key ya existe dentro del Trie
                 currentNode.isEndOfWord = currentNode.isEndOfWord + isEndOfWord
-                return currentNode.children
+                return currentNode
             else:
                 currentNode = currentNode.nextNode
-        if currentNode.key == char and currentNode.nextNode == None:
+        if currentNode.key == char and currentNode.nextNode == None: #Revision del ultimo elemento por condicion currentNode.nextNode
             currentNode.isEndOfWord = currentNode.isEndOfWord + isEndOfWord
+            return currentNode
         else:
             auxNode = TrieNode()
             auxNode.key = char
             auxNode.parent = tree.root
             auxNode.isEndOfWord = auxNode.isEndOfWord + isEndOfWord
             currentNode.nextNode = auxNode
-            currentNode = auxNode
-    return currentNode
+            return auxNode
 
 
 def createASCIINode(tree):
@@ -155,7 +182,7 @@ def validateInput(string):
     else:
         length = len(string)
         auxString = ""
-        for x in range(0, length - 1):
+        for x in range(0, length):
             key = ord(string[x])
 
             #Letras de la "a" a la "z" con ñ incluida
