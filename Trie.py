@@ -1,111 +1,93 @@
 from algo1 import *
-class root:
-    root = None
 
+#Definimos la estructura ArrayNode.
+class ArrayNode:
+  key = None
+  children = None
+  isEndOfWord = False
+
+#Definimos la estructura LinkedList.
+class LinkedList:
+  head=None
+
+#Definimos la estructura Trie.
+class Trie:
+  root = None
+
+#Definimos la estructura TrieNode.
 class TrieNode:
-    key = None
-    isEndOfWord = 0
-    nextNode = None
-    parent = None
-    children = None
+  key = None
+  children = None
+  nextNode = None
+  isEndOfWord = False
 
-#Input: 
-#Output:
-#Function:
-def insert(tree, string):
-    if tree.root == None: tree = addRoot(tree)
-    if string == None: return None
-    string = validateInput(String(string))
-    length = len(string)
-    x = 0
-    while x != length:
-        if x == length - 1:
-            isEndOfWord = 1
+#Se crea una función que inserte un elemento(palabra) en T, siendo T un Trie.
+def insert(T,element):
+  #Se valida la entrada.
+  if element == "":
+    return None
+  
+  element = validateInput(element)
+  
+  #Se verifica si el árbol se encuentra vacío.
+  if T.root == None:
+      T.root = TrieNode()
+      ASCIIArray = Array(74,ArrayNode())
+      T.root.children = ASCIIArray
+  
+  ASCIIArray = T.root.children
+  for i in range(0,2):
+    position = hashAlphabet(element[i])
+    if ASCIIArray[position] == None:
+      ASCIIArray[position] = ArrayNode()
+      ASCIIArray[position].key = element(i)
+      if len(element) - 1 != i:
+        if i == 0: 
+          ASCIIArray[position].children = Array(74,ArrayNode())
         else:
-            isEndOfWord = 0
-        if x == 0 :
-            currentNode = caseOfLevel0(tree, string[x], isEndOfWord)
-            x += 1
-        else:
-            if currentNode.children == None: #Primer nodo hijo
-                auxNode = TrieNode()
-                auxNode.key = string[x]
-                auxNode.isEndOfWord = auxNode.isEndOfWord + isEndOfWord        
-                auxNode.parent = currentNode
-                currentNode.children = auxNode
-                currentNode = auxNode
-                x += 1
-            else: #El nodo ya tiene al menos un hijo
-                parentNode = currentNode #Se guarda el nodo padre
-                currentNode = currentNode.children
-                while currentNode.nextNode != None:
-                    if currentNode.key == string[x]: #Si ya existe la key a insertar, entonces avanzamos por ella
-                        currentNode.isEndOfWord = currentNode.isEndOfWord + isEndOfWord
-                        x += 1
-                        break
-                if currentNode.key == string[x]: #Si ya existe la key a insertar, entonces avanzamos por ella
-                    currentNode.isEndOfWord = currentNode.isEndOfWord + isEndOfWord
-                    x += 1
-                else: #La key a insertar no se encuentra dentro de los hijos de parentNode
-                    auxNode = TrieNode()
-                    auxNode.key = string[x]
-                    auxNode.parent = parentNode 
-                    auxNode.isEndOfWord = auxNode.isEndOfWord + isEndOfWord
-                    currentNode.nextNode = auxNode
-                    currentNode = auxNode
-                    x += 1
+          ASCIIArray[position].children = LinkedList()
+          ASCIIArray[position].children.head = TrieNode()
+    if len(element) - 1 == i:
+      ASCIIArray[position].isEndOfWord = True
+      break
+    ASCIIArray = ASCIIArray[position].children
+             
+  if ASCIIArray[position].isEndOfWord != True: 
+    currentNode = ASCIIArray[position]
+    #Se crea un bucle para insertar cada caracter del elemento en un nodo nuevo, recorriendo nivel por nivel del árbol.
+    for i in range(2, len(element)):
+      #Se crea un TrieNode, que será el nodo insertado en una lista como hijo.  
+      newNode = TrieNode()
 
+      #Se verifica que tenga al menos un hijo el nodo padre.
+      if currentNode.children != None:
+        #Si tiene al menos un hijo, se recorre el nivel buscando que el caracter correpondiente coincida con la key de algún nodo.
+        currentNode = currentNode.children.head
+        while currentNode != None:
+          if element[i] == currentNode.key or currentNode.nextNode == None:
+            break
+          currentNode = currentNode.nextNode
 
-def caseOfLevel0(tree, char, isEndOfWord):#Revisar esta funcion, tratar de bajar la complejidad a la hora de leerla.
-    currentNode = tree.root.children
-    if currentNode == None: 
-        createASCIINode(tree)
-    updateASCII(tree.root.children.key, char)
-    currentNode = tree.root.children
-    if currentNode.nextNode == None: #Caso 1: El nodo a insertar es el primero del Trie, despues del ASCIINode
-        auxNode = TrieNode()
-        auxNode.key = char
-        auxNode.parent = tree.root
-        auxNode.isEndOfWord = isEndOfWord + auxNode.isEndOfWord
-        currentNode.nextNode = auxNode
-        return auxNode
-    else:
-        while currentNode.nextNode != None: #Caso 2: El nodo a insertar no es el primero despues de ASCIINode
-            if currentNode.key == char: #La key ya existe dentro del Trie
-                currentNode.isEndOfWord = currentNode.isEndOfWord + isEndOfWord
-                return currentNode
-            else:
-                currentNode = currentNode.nextNode
-        if currentNode.key == char and currentNode.nextNode == None: #Revision del ultimo elemento por condicion currentNode.nextNode
-            currentNode.isEndOfWord = currentNode.isEndOfWord + isEndOfWord
-            return currentNode
-        else:
-            auxNode = TrieNode()
-            auxNode.key = char
-            auxNode.parent = tree.root
-            auxNode.isEndOfWord = auxNode.isEndOfWord + isEndOfWord
-            currentNode.nextNode = auxNode
-            return auxNode
-
-
-def createASCIINode(tree):
-    if tree.root == None: return None
-    currentNode = tree.root
-    currentNode.children = TrieNode()
-    currentNode.children.key = Array(74, 0)
-    currentNode.parent = tree.root               
-
-#Input: Array Ascii y una letra
-#Output: Ascii actualizado
-#Function: Se encarga de cambiar los valores 0 por valor 1 en la celda que le corresponde a la letra dentro del arreglo ASCII
-def updateASCII(AsciiArray,key):
-    if key == None or AsciiArray == None: return None
-    else:
-        key = hashAlphabet(key)
-        AsciiArray[key] = 1
-        return AsciiArray
-
-                
+        #Si no hay coincidencia, se crea un nuevo LinkedNode con su respectivo TrieNode y se inserta al final de la lista y en el árbol.
+        if element[i] != currentNode.key:
+          newNode.key = element[i]
+          currentNode.nextNode = TrieNode()
+          currentNode.nextNode = newNode
+          currentNode = currentNode.nextNode
+      else:
+        #Si no tiene hijos, como children del nodo padre se crea una LinkedList y en su value se insertará el nodo con key igual al caracter correspondiente de la string.
+        currentNode.children = LinkedList()
+        currentNode.children.head = TrieNode()
+        newNode.key = element[i]
+        currentNode.children.head = newNode
+        
+        #Se actualizan los nodos para recorrer el árbol.
+        currentNode = currentNode.children.head
+        
+      #Si el nodo insertado tenía al último caracter de la string, su isEndOfWord se actualiza a true y se termina la ejecución del bucle, dejando a su children como None.
+      if i == len(element) - 1:
+        currentNode.isEndOfWord = True
+        break
 
 #Input: Recibe una letra
 #Output: Devuelve un codigo 
@@ -162,16 +144,6 @@ def hashAlphabet(key):
     if key <= 57 and key >= 48:
         key = key + 6
         return key
-
-#Input: tree =(Variable vacia)
-#Output: No presenta
-#Function: Se encarga de convertir una variable vacia en una variable de tipo root, para usarla de raiz en el arbol
-def addRoot(tree):
-    if tree != None: return None
-    tree = root()
-    auxNode = TrieNode()
-    tree.root = auxNode
-    return tree
 
 #Input: Recibe un string 
 #Output: Nuevo string depurado
