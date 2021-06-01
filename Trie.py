@@ -4,7 +4,7 @@ from algo1 import *
 class ArrayNode:
   key = None
   children = None
-  isEndOfWord = False
+  isEndOfWord = 0
 
 #Definimos la estructura LinkedList.
 class LinkedList:
@@ -19,75 +19,85 @@ class TrieNode:
   key = None
   children = None
   nextNode = None
-  isEndOfWord = False
+  isEndOfWord = 0
 
 #Se crea una función que inserte un elemento(palabra) en T, siendo T un Trie.
 def insert(T,element):
   #Se valida la entrada.
-  if element == "":
+  if element == "" :
     return None
   
   element = validateInput(element)
-  
+  if element == None or element == "":
+    return None
+  length = len(element)
+
   #Se verifica si el árbol se encuentra vacío.
   if T.root == None:
-      T.root = TrieNode()
-      ASCIIArray = Array(74,ArrayNode())
-      T.root.children = ASCIIArray
-  
-  ASCIIArray = T.root.children
+    T.root = TrieNode()
+    ASCIIArray = Array(74,ArrayNode())
+    T.root.children = ASCIIArray
+  else:
+    ASCIIArray = T.root.children
+    
+
+  #ASCIIArray = T.root.children en teoria esta de mas, cuidado variable apuntador
+
   for i in range(0,2):
     position = hashAlphabet(element[i])
     if ASCIIArray[position] == None:
       ASCIIArray[position] = ArrayNode()
-      ASCIIArray[position].key = element(i)
-      if len(element) - 1 != i:
-        if i == 0: 
+      ASCIIArray[position].key = element[i]
+    if length - 1 != i:
+      if i == 0: 
+        if ASCIIArray[position].children == None:
           ASCIIArray[position].children = Array(74,ArrayNode())
-        else:
-          ASCIIArray[position].children = LinkedList()
-          ASCIIArray[position].children.head = TrieNode()
-    if len(element) - 1 == i:
-      ASCIIArray[position].isEndOfWord = True
-      break
-    ASCIIArray = ASCIIArray[position].children
-             
-  if ASCIIArray[position].isEndOfWord != True: 
-    currentNode = ASCIIArray[position]
-    #Se crea un bucle para insertar cada caracter del elemento en un nodo nuevo, recorriendo nivel por nivel del árbol.
-    for i in range(2, len(element)):
-      #Se crea un TrieNode, que será el nodo insertado en una lista como hijo.  
-      newNode = TrieNode()
-
-      #Se verifica que tenga al menos un hijo el nodo padre.
-      if currentNode.children != None:
-        #Si tiene al menos un hijo, se recorre el nivel buscando que el caracter correpondiente coincida con la key de algún nodo.
-        currentNode = currentNode.children.head
-        while currentNode != None:
-          if element[i] == currentNode.key or currentNode.nextNode == None:
-            break
-          currentNode = currentNode.nextNode
-
-        #Si no hay coincidencia, se crea un nuevo LinkedNode con su respectivo TrieNode y se inserta al final de la lista y en el árbol.
-        if element[i] != currentNode.key:
-          newNode.key = element[i]
-          currentNode.nextNode = TrieNode()
-          currentNode.nextNode = newNode
-          currentNode = currentNode.nextNode
       else:
-        #Si no tiene hijos, como children del nodo padre se crea una LinkedList y en su value se insertará el nodo con key igual al caracter correspondiente de la string.
-        currentNode.children = LinkedList()
-        currentNode.children.head = TrieNode()
-        newNode.key = element[i]
-        currentNode.children.head = newNode
-        
-        #Se actualizan los nodos para recorrer el árbol.
-        currentNode = currentNode.children.head
-        
-      #Si el nodo insertado tenía al último caracter de la string, su isEndOfWord se actualiza a true y se termina la ejecución del bucle, dejando a su children como None.
-      if i == len(element) - 1:
-        currentNode.isEndOfWord = True
-        break
+        if ASCIIArray[position].children == None:
+          ASCIIArray[position].children = LinkedList()
+    else:
+      ASCIIArray[position].isEndOfWord = ASCIIArray[position].isEndOfWord + 1
+      return element
+    if i != 1:
+     ASCIIArray = ASCIIArray[position].children
+             
+
+  currentNode = ASCIIArray[position]
+  #Se crea un bucle para insertar cada caracter del elemento en un nodo nuevo, recorriendo nivel por nivel del árbol.
+  for i in range(2, length):
+    #Se crea un TrieNode, que será el nodo insertado en una lista como hijo.  
+    newNode = TrieNode()
+    newNode.children = LinkedList()
+    newNode.key = element[i]
+
+    #Se verifica que tenga al menos un hijo el nodo padre.
+    if currentNode.children.head != None:
+      #Si tiene al menos un hijo, se recorre el nivel buscando que el caracter correpondiente coincida con la key de algún nodo.
+      currentNode = currentNode.children.head
+      while currentNode != None:
+        if element[i] == currentNode.key:
+          break
+        elif currentNode.nextNode == None:
+          break
+        currentNode = currentNode.nextNode
+
+      #Si no hay coincidencia, se crea un nuevo LinkedNode con su respectivo TrieNode y se inserta al final de la lista y en el árbol.
+      if element[i] != currentNode.key:
+        currentNode.nextNode = TrieNode()
+        currentNode.nextNode = newNode
+        currentNode = currentNode.nextNode
+    else:
+      #Si no tiene hijos, como children del nodo padre se crea una LinkedList y en su value se insertará el nodo con key igual al caracter correspondiente de la string.
+      currentNode.children = LinkedList()
+      currentNode.children.head = newNode
+      
+      #Se actualizan los nodos para recorrer el árbol.
+      currentNode = currentNode.children.head
+      
+    #Si el nodo insertado tenía al último caracter de la string, su isEndOfWord se actualiza a true y se termina la ejecución del bucle, dejando a su children como None.
+    if i == length - 1:
+      currentNode.isEndOfWord = currentNode.isEndOfWord + 1
+      return currentNode.key
 
 #Input: Recibe una letra
 #Output: Devuelve un codigo 
