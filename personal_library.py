@@ -8,7 +8,6 @@ def main(argv, key):
         #Llamado al algoritmo de busqueda al estilo, search.search(argv)
         print("Brandom Sanderson")
 
-
 if __name__ == "__main__":
     if len(sys.argv) != 3: print("invalid Input")
     else:

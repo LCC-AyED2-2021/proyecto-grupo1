@@ -9,7 +9,8 @@ import pickle
 def createLibrary(localPath):
     directory = os.listdir(localPath)
     library = Array(len(directory), Array(2, None))
-    for x in range(0, len(directory)):
+    lengthDir = len(directory)
+    for x in range(0, lengthDir):
         trie = Trie()
         currentTxt = open(localPath+ "/" + directory[x], encoding='utf-8')
         currentLine = currentTxt.read()
@@ -23,7 +24,7 @@ def createLibrary(localPath):
                 auxString = ""
         library.data[x].data[0] = directory[x]
         library.data[x].data[1] = trie
-    currentTxt.close
+        currentTxt.close
     saveLibrary(library, localPath)
     return library
 
@@ -32,3 +33,4 @@ def saveLibrary(library, localPath):
     with open(localPath + "/library", "xb") as storeLib:
         pickle.dump(library, storeLib)
     return storeLib
+
