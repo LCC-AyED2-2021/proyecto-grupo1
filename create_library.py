@@ -1,6 +1,7 @@
 from Trie import *
 from algo1 import *
 import os
+import pickle
 
 #Input: recibe una direccion de ficheros
 #Output: devuelve un arreglo con la libreria de Trie almacenados
@@ -23,8 +24,11 @@ def createLibrary(localPath):
         library.data[x].data[0] = directory[x]
         library.data[x].data[1] = trie
     currentTxt.close
-    saveLibrary(library)
+    saveLibrary(library, localPath)
     return library
 
-def saveLibrary(library):
-    
+def saveLibrary(library, localPath):
+    if library == None: return None
+    with open(localPath + "/library", "xb") as storeLib:
+        pickle.dump(library, storeLib)
+    return storeLib
