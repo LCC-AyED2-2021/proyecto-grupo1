@@ -8,26 +8,21 @@ class Node:
   name = None 
   nextNode = None
 
-#Se crea una función que calcule el número de elementos de una lista.
+#Input: Una LinkedList L.
+#Output: Cantidad de elementos de la LinkedList.
+#Function: Calcula el número de elementos de una lista.
 def length(L):
-  #Se crea una variable que indique la cantidad de elementos de L.
   contador = 0
-
-  #Se crea una nueva variable de tipo Node.
   currentNode = L.head
-
-  #Se recorre la lista.
-  while currentNode != None:
+  while currentNode != None: #Se recorre la lista hasta el final.
     currentNode = currentNode.nextNode
     contador = contador + 1
-  
-  #Finalmente, se devuelve el valor de la variable creada al comienzo de la función.
-  return contador
+  return contador #Se devuelve el valor de la variable contador.
 
-#Se crea una función que agregue un elemento al comienzo de L, siendo L una LinkedList.
+#Input: Una LinkedList L, un valor element y una cadena document.
+#Output: No presenta.
+#Function: Agrega un elemento al comienzo de L
 def add(L, element, document):
-
-  #Se crea una nueva variable de tipo Node que en value lleva element y se inserta en el comienzo de L.
   newNode = Node()
   newNode.value = element
   newNode.name = document
@@ -35,44 +30,29 @@ def add(L, element, document):
   L.head = newNode
   return
 
-#Se crea una función que inserte un elemento en una posición determinada de una lista.
+#Input: Una LinkedList L, un valor element, una posición position y una cadena document.
+#Output: position.
+#Function: Inserte un elemento en una posición determinada de L.
 def insert(L,element,position,document):
-  #Se crea una variable que indique la cantidad de elementos de L.
   contador = length(L)
-
-  #Se verifica si la posición ingresada es válida.
   if position < 0 or position > contador:
-    #Si la posición ingresada no es válida, se devuelve None.
-    return None
+    return None #Si la posición ingresada no es válida, se devuelve None.
   elif position == 0:
-    #Si la posición es la inicial, simplemente se llama a add.
-    add(L,element,document)
-  else:
-    #Si la posición ingresada es válida se procede a insertar el elemento, comenzando por crear una nueva variable de tipo Node.
+    add(L,element,document) #Si la posición es la inicial, se llama a add.
+  else: #Si la posición ingresada es válida se inserta donde corresponde.
     currentNode = L.head
-    #Se crea otra variable de tipo Node que en value lleve element.
     newNode = Node()
     newNode.value = element
     newNode.name = document
-
-    #Se verifica si la lista contiene nodos.
     if currentNode == None:
-      #Si la lista no contiene nodos, entonces la segunda variable creada será el único nodo de la misma.
-      L.head = newNode
+      L.head = newNode #Si L no contiene nodos, el elemento será el único nodo de la misma.
     else:
-      #Si la lista contiene uno o más nodos se procede a insertar el elemento en la posición correspondiente, comenzando por crea una variable que indique la posición de cada nodo cuando se recorra la lista.
       currentpos = 0
-
-      #Se recorre la lista.
-      while currentNode != None and currentpos < position - 1:
+      while currentNode != None and currentpos < position - 1: #Se recorre la lista.
         currentNode = currentNode.nextNode
         currentpos = currentpos + 1
-
-      #Una vez se llega a la posción deseada, se inserta a element.
-      newNode.nextNode = currentNode.nextNode
+      newNode.nextNode = currentNode.nextNode #Una vez se llega a la posción deseada, se inserta element.
       currentNode.nextNode = newNode
-    
-    #Finalmente se devuelve la posición indicada.
     return position
 
 #Input: L = lista; value = int; name = Str
