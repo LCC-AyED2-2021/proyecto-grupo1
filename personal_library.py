@@ -19,19 +19,18 @@ def main(argv, key):
 #Output: devuelve un arreglo con la libreria de Trie almacenados
 #Funcion: Dado un directorio, la funcion createLibrary crea un arreglo de n elementos, para los cuales creara un Trie por cada elemento.
 def createLibrary(localPath):
-    if os.path.isdir(localPath) == False: #validar entradas
-      print("Directory don't exist")
+    if os.path.isdir(localPath) == False: 
+      print("invalid directory")
       return None
     directory = os.listdir(localPath) #Lista con los nombres de los .txt
+    if len(directory) == 0: 
+      print("Empty directory")
+      return None
     library = Array(len(directory), Array(2, None)) #Arreglo donde almacenar los nombres de los .txt y sus respectivos Trie's
     lengthDir = len(directory)
     for x in range(0, lengthDir):
         trie = Trie.Trie()
-        if os.path.isdir(localPath+ "/" + directory[x]) == True: #Validar entradas
-          currentTxt = open(localPath+ "/" + directory[x], encoding='utf-8')
-        else:
-          print("Directory don't exist")
-          return None
+        currentTxt = open(localPath+ "/" + directory[x], encoding='utf-8')
         currentLine = currentTxt.read()
         length = len(currentLine)
         auxString = ""
