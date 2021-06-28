@@ -5,42 +5,55 @@ import pickle
 import sys
 import Trie
 
+#Input: Dos variable, argv tipo Str y key tipo Int.
+#Output: No presenta.
+#Function: Invoca a la funcion create library o a search library segun lo precisado por el usuario.
 def main(argv, key):
-    if key == 0: #comando create
+    if key == 0: #Comando create
         createLibrary(argv)
-    else:
+    else: #Comando search
         searchWord(argv)
-        #Llamado al algoritmo de busqueda al estilo, search.search(argv)
+
 
 #Input: recibe una direccion de ficheros
 #Output: devuelve un arreglo con la libreria de Trie almacenados
 #Funcion: Dado un directorio, la funcion createLibrary crea un arreglo de n elementos, para los cuales creara un Trie por cada elemento.
 def createLibrary(localPath):
-    directory = os.listdir(localPath)
-    library = Array(len(directory), Array(2, None))
+    if os.path.isdir(localPath) == False: #validar entradas
+      print("Directory don't exist")
+      return None
+    directory = os.listdir(localPath) #Lista con los nombres de los .txt
+    library = Array(len(directory), Array(2, None)) #Arreglo donde almacenar los nombres de los .txt y sus respectivos Trie's
     lengthDir = len(directory)
     for x in range(0, lengthDir):
         trie = Trie.Trie()
-        currentTxt = open(localPath+ "/" + directory[x], encoding='utf-8')
+        if os.path.isdir(localPath+ "/" + directory[x]) == True: #Validar entradas
+          currentTxt = open(localPath+ "/" + directory[x], encoding='utf-8')
+        else:
+          print("Directory don't exist")
+          return None
         currentLine = currentTxt.read()
         length = len(currentLine)
         auxString = ""
-        for n in range(0, length):
+        for n in range(0, length): #Loop que recorre completamente el texto dentro de .txt y va almacenando las palabras dentro de un Trie
             if currentLine[n] != " " and currentLine[n] != "." and currentLine[n] != "," and currentLine[n] != "?" and currentLine[n] != "!" and currentLine[n] != "\n":
                 auxString = auxString + currentLine[n]
-            else:
+            else: #Fin de una palabra
                 Trie.insert(trie, auxString)
                 auxString = ""
-        library.data[x].data[0] = directory[x]
-        library.data[x].data[1] = trie
+        library.data[x].data[0] = directory[x] #Almacenamiento del nombre del .txt dentro de la libreria
+        library.data[x].data[1] = trie #Almacenamiento del Trie del .txt dentro de la libreria
         currentTxt.close
-    saveLibrary(library)
+    saveLibrary(library) #Al terminar, se guarda la libreria en el directorio actual
     return library
 
+#Input: Recibe una esctructura que contiene los nombres de los .txt y ademas contiene los Trie de cada .txt
+#Output: No presenta
+#Function: Se encarga de guardar en memoria la estructura en la que se encuentran almacenados los trie .txt y los titulos de los mismos
 def saveLibrary(library):
     if library == None: return None
-    path = os.getcwd()
-    with open(path + "/library", "xb") as storeLib:
+    path = os.getcwd() #Obtenemos la direccion donde se almacenara library.
+    with open(path + "/library", "wb") as storeLib:
         pickle.dump(library, storeLib)
     return storeLib
   

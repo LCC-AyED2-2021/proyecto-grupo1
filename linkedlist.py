@@ -75,8 +75,11 @@ def insert(L,element,position,document):
     #Finalmente se devuelve la posición indicada.
     return position
 
+#Input: L = lista; value = int; name = Str
+#Output: No presenta
+#Function: Se encarga de añadir un nodo nuevo al final de una lista
 def addEnd(L, value, name):
-    if L.head == None:
+    if L.head == None: #Si la lista esta vacia, se invoca a un add normal.
         add(L, value, name)
     else:
         newNode = Node()
@@ -88,14 +91,20 @@ def addEnd(L, value, name):
         currentNode.nextNode = newNode
         return "OK"
 
-def MergeSort(L):
-    if L.head == None:
+#Input: Recibe una lista
+#Output: Lista ordenada de mayor a menor
+#Function: Ordena una lista de mayor a menor atraves de la tecnica "divide and conquer"
+def MergeSort(L): #Funcion wrapper
+    if L.head == None: #Validacion de entradas
         return
     else:
         return MergeSortR(L)
 
+#Input: Recibe una lista
+#Output: Lista ordenada de mayor a menor
+#Function: Ordena una lista de mayor a menor atraves de la tecnica "divide and conquer". (Divide)
 def MergeSortR(L):
-    if L.head.nextNode == None:
+    if L.head.nextNode == None: #Valida entradas, caso de parada
         return L
     
     tamaño = length(L)
@@ -103,10 +112,10 @@ def MergeSortR(L):
     leftList = LinkedList()
     rightList = LinkedList()
     currentNode = L.head
-    if tamaño % 2 == 0: 
+    if tamaño % 2 == 0: #Se busca que la lista sea par, esto es para que a la hora de la division no genere problemas
         centinel = midPos
     else:
-        centinel = midPos + 1
+        centinel = midPos + 1 #Variable centinel se utiliza para lograr una buena division de listas
 
     for x in range(0, midPos):
         addEnd(leftList, currentNode.value, currentNode.name)
@@ -116,28 +125,31 @@ def MergeSortR(L):
         addEnd(rightList, currentNode.value, currentNode.name)
         currentNode = currentNode.nextNode
 
-    leftList = MergeSortR(leftList)
+    leftList = MergeSortR(leftList) #Llamado recursivo para ir subdividiendo las listas hasta que queden de un solo nodo
     rightList = MergeSortR(rightList)
 
     return Merge(leftList, rightList)
 
+#Input: Recibe dos listas, que son sublistas de una mas grande. L = leftList ; R= rightList
+#Output: Devuelve una lista auxiliar ordenada
+#Function: Se encarga de mezclar y ordenar dichas sublistas, generando una lista mas grande ya ordenada. (Conquer)
 def Merge(L, R):
     auxList = LinkedList()
     currentNodeL = L.head
     currentNodeR = R.head
     counter = 0
-    while currentNodeL != None or currentNodeR != None:
-        if currentNodeL != None and currentNodeR != None:
+    while currentNodeL != None or currentNodeR != None: #Se recorren ambas listas hasta que queden completamente recorridas
+        if currentNodeL != None and currentNodeR != None: #Caso donde ambas lista no han sido recorridas en su totalidad
             if currentNodeL.value > currentNodeR.value:
                 insert(auxList, currentNodeL.value, counter, currentNodeL.name)
                 currentNodeL = currentNodeL.nextNode
             else:
                 insert(auxList, currentNodeR.value, counter, currentNodeR.name)
                 currentNodeR = currentNodeR.nextNode
-        elif currentNodeL == None:
+        elif currentNodeL == None: #Caso donde la lista de la izquierda fue recorrida en su totalidad
             insert(auxList, currentNodeR.value, counter, currentNodeR.name)
             currentNodeR = currentNodeR.nextNode
-        elif currentNodeR == None:
+        elif currentNodeR == None: #Caso donde la lista de la derecha fue recorrida en su totalidad
             insert(auxList, currentNodeL.value, counter, currentNodeL.name)
             currentNodeL = currentNodeL.nextNode
         counter += 1 
