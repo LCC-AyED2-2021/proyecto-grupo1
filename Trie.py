@@ -35,7 +35,7 @@ def insert(T,element):
   #Se verifica si el árbol se encuentra vacío.
   if T.root == None:
     T.root = TrieNode()
-    ASCIIArray = Array(62,ArrayNode())
+    ASCIIArray = Array(65,ArrayNode())
     T.root.children = ASCIIArray
   else:
     ASCIIArray = T.root.children
@@ -51,7 +51,7 @@ def insert(T,element):
     if length - 1 != i:
       if i == 0: 
         if ASCIIArray[position].children == None:
-          ASCIIArray[position].children = Array(62,ArrayNode())
+          ASCIIArray[position].children = Array(65,ArrayNode())
       else:
         if ASCIIArray[position].children == None:
           ASCIIArray[position].children = LinkedList()
@@ -118,6 +118,15 @@ def hashAlphabet(key):
   if key <= 57 and key >= 48:
       key = key + 4
       return key
+  if key == 45:
+    key = 62
+    return key
+  if key == 8217:
+    key = 63
+    return key
+  if key == 38:
+    key = 64
+    return key
 
 #Input: Recibe un string 
 #Output: Nuevo string depurado
@@ -135,5 +144,11 @@ def validateInput(string):
       auxString = auxString + string[x]
     #Numeros del 0 al 9.
     if key <= 57 and key >= 48:
+      auxString = auxString + string[x]
+    if key == 45:
+      auxString = auxString + string[x]
+    if key == 8217:
+      auxString = auxString + string[x]
+    if key == 38:
       auxString = auxString + string[x]
   return auxString 
