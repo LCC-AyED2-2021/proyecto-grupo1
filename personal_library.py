@@ -132,7 +132,7 @@ def searchWord(word):
   else: 
     print("Search results for “", word ,"”:")
     if wordsList.head.nextNode == None:
-      print("_",  wordsList.head.name)
+      print("_",  wordsList.head.name, "- Relevancia:", wordsList.head.value)
     else:
       wordsList = MergeSort(wordsList) #Función que ordena la LinkedList.
       currentNode = wordsList.head
