@@ -57,6 +57,7 @@ def saveLibrary(library):
     path = os.getcwd() #Obtenemos la direccion donde se almacenara library.
     with open(path + "/library", "wb") as storeLib:
         pickle.dump(library, storeLib)
+    print("library created successfully")
     return storeLib
 
 #Input: Recibe una palabra.
