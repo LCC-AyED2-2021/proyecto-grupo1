@@ -66,6 +66,9 @@ def searchWord(word):
     return
   
   path = os.getcwd() #Se accede a la librería.
+  if os.path.isfile(path +'/library') == False: 
+    print("It is not possible to search for words in an empty library.")
+    return None    
   with open(path +'/library', 'br') as f: 
     library = pickle.load(f)
   
@@ -130,7 +133,7 @@ def searchWord(word):
       wordsList = MergeSort(wordsList) #Función que ordena la LinkedList.
       currentNode = wordsList.head
       while currentNode != None:
-        print("_", currentNode.name)
+        print("_", currentNode.name, "- Relevancia:", currentNode.value)
         currentNode = currentNode.nextNode
   return
 
