@@ -31,7 +31,7 @@ def createLibrary(localPath):
     for x in range(0, lengthDir):
         trie = Trie.Trie()
         if os.path.isfile(localPath+ "/" + directory[x]) == False:
-          print("error, a .txt has disappeared")
+          print("Error file missing")
           return None
         currentTxt = open(localPath+ "/" + directory[x], encoding='utf-8')
         currentLine = currentTxt.read()
