@@ -56,28 +56,32 @@ def saveLibrary(library):
     with open(path + "/library", "wb") as storeLib:
         pickle.dump(library, storeLib)
     return storeLib
-  
+
+#Input: Recibe una palabra.
+#Output: No presenta.
+#Function: Busca en una librería todos los archivos que contengan la palabra y los imprime de mayor a menor según su relevancia.
 def searchWord(word):
-  word = Trie.validateInput(word)
+  word = Trie.validateInput(word) #Se valida la entrada.
   if word == "":
     print("There is no word to search.")
     return
-  path = os.getcwd()
-
-  with open(path +'/library', 'br') as f:
+  
+  path = os.getcwd() #Se accede a la librería.
+  with open(path +'/library', 'br') as f: 
     library = pickle.load(f)
-  wordsList = LinkedList()
-  for i in range (0,len(library)):
+  
+  wordsList = LinkedList() 
+  for i in range (0,len(library)):  #Bucle que recorre cada documento buscando la palabra.
     counter = 0
     currentNode = library[i][1].root.children
     condition = True
-    for j in range(0,len(word)):
-      if currentNode == None:
+    for j in range(0,len(word)): #Se asume que la palabra existe en el Trie correspondiente al documento, hasta que el bucle encuentre una letra de la palabra que no se presente.
+      if currentNode == None: 
         condition = False
         break
       value = word[counter]
       position = Trie.hashAlphabet(value)
-      if j < 2:
+      if j < 2: #Si no se encuentra la letra, la condición se vuelve falsa y se corta el bucle.
         if currentNode[position] == None or currentNode[position].key != value:
           condition = False
           break
@@ -90,7 +94,7 @@ def searchWord(word):
           condition = False
           break
       
-      if j != len(word) - 1:
+      if j != len(word) - 1: #Si la letra se encontró y no es la última, se actualiza la variable para recorrer el Trie.
         if j == 0:
           currentNode = currentNode[position].children
         else:
@@ -99,7 +103,7 @@ def searchWord(word):
           else:
             currentNode = currentNode.children.head
         counter = counter + 1 
-      else:
+      else: #Si la letra se encontró y es la última, se guarda la relevancia del Nodo, siempre que su isEndOfWord sea mayor que 0.
         if j < 2:
           if currentNode[position].isEndOfWord == 0:
             condition = False
@@ -113,18 +117,18 @@ def searchWord(word):
           else:
             relevance = currentNode.isEndOfWord  
       
-    if condition:
+    if condition: #Si la condición no se volvió falsa, se agrega el documento a la LinkedList con su relevancia y su nombre.
       auxString = String(library[i][0])
       add(wordsList,relevance,substr(auxString,0,len(auxString)-4))
 
-  if wordsList.head == None:
+  if wordsList.head == None: #Se imprime la LinkedList ordenada, si es que no se encuentra vacía.
     print("no document found.")
-  else:
+  else: 
     print("Search results for “", word ,"”:")
     if wordsList.head.nextNode == None:
       print("_",  wordsList.head.name)
     else:
-      wordsList = MergeSort(wordsList)
+      wordsList = MergeSort(wordsList) #Función que ordena la LinkedList.
       currentNode = wordsList.head
       while currentNode != None:
         print("_", currentNode.name)
