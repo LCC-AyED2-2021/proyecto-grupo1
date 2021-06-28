@@ -8,7 +8,7 @@ class Node:
   name = None 
   nextNode = None
 
-#Input: Una LinkedList L.
+#Input: Recibe una LinkedList L.
 #Output: Cantidad de elementos de la LinkedList.
 #Function: Calcula el número de elementos de una lista.
 def length(L):
@@ -19,7 +19,7 @@ def length(L):
     contador = contador + 1
   return contador #Se devuelve el valor de la variable contador.
 
-#Input: Una LinkedList L, un valor element y una cadena document.
+#Input: Recibe una LinkedList L, un valor element y una cadena document.
 #Output: No presenta.
 #Function: Agrega un elemento al comienzo de L
 def add(L, element, document):
@@ -30,7 +30,7 @@ def add(L, element, document):
   L.head = newNode
   return
 
-#Input: Una LinkedList L, un valor element, una posición position y una cadena document.
+#Input: Recibe una LinkedList L, un valor element, una posición position y una cadena document.
 #Output: position.
 #Function: Inserte un elemento en una posición determinada de L.
 def insert(L,element,position,document):
