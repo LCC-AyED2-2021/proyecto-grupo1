@@ -1,12 +1,12 @@
 import create_library
+import search_library
 import sys
 
 def main(argv, key):
     if key == 0: #comando create
         create_library.createLibrary(argv)
     else:
-        #Llamado al algoritmo de busqueda al estilo, search.search(argv)
-        print("Brandom Sanderson")
+        search_library.searchWord(argv + '/library',argv)
 
 if __name__ == "__main__":
     if len(sys.argv) != 3: print("invalid Input")
@@ -16,4 +16,4 @@ if __name__ == "__main__":
         elif sys.argv[1] == "-search":
             main(sys.argv[2], 1)
         else:
-            print("unknown command")
+            print("unknown command") 
