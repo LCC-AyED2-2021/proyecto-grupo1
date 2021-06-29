@@ -38,7 +38,7 @@ def createLibrary(localPath):
         length = len(currentLine)
         auxString = ""
         for n in range(0, length): #Loop que recorre completamente el texto dentro de .txt y va almacenando las palabras dentro de un Trie
-            if currentLine[n] != " " and currentLine[n] != "." and currentLine[n] != "," and currentLine[n] != "?" and currentLine[n] != "!" and currentLine[n] != "\n":
+            if currentLine[n] != " " and currentLine[n] != "." and currentLine[n] != "," and currentLine[n] != "?" and currentLine[n] != "!" and currentLine[n] != "\n" and currentLine[n] != ";" and currentLine[n] != ":" and currentLine[n] != "'" and currentLine[n] != '"' and currentLine[n] != "@" and currentLine[n] != "«" and currentLine[n] != "»" and currentLine[n] != "“" and currentLine[n] != "”" and currentLine[n] != "¿" and currentLine[n] != "¡" and currentLine[n] != "(" and currentLine[n] != ")" and currentLine[n] != "[" and currentLine[n] != "]" and currentLine[n] != "{" and currentLine[n] != "}" and currentLine[n] != "/" and currentLine[n] != "\\" and currentLine[n] != "%" and currentLine[n] != "$":
                 auxString = auxString + currentLine[n]
                 if n == length - 1: #Caso en el que la última palabra no termine en un simbolo de los anteriores.
                   Trie.insert(trie, auxString)  
