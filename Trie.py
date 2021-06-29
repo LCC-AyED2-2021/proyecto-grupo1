@@ -53,7 +53,12 @@ def insert(T,element):
           ASCIIArray[position].children = LinkedList()
     else: #Si la letra es la última de la palabra, se incrementa en uno su valor de isEndOfWord.
       ASCIIArray[position].isEndOfWord = ASCIIArray[position].isEndOfWord + 1
-      ASCIIArray[position].children = LinkedList()
+      if i == 0:
+        if ASCIIArray[position].children == None:
+          ASCIIArray[position].children = Array(65,ArrayNode())
+      else:
+        if ASCIIArray[position].children == None:
+          ASCIIArray[position].children = LinkedList()
       return element
     if i != 1:
       ASCIIArray = ASCIIArray[position].children #Se actualiza la variable apuntador.
